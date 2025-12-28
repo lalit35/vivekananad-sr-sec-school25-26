@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Admit Card</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        /* Header */
+        .header {
+            background-color: #2a5298;
+            width: 100%;
+            padding: 10px 0;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .header .school-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFDC5E;
+        }
+
+        .header .competition-name {
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        /* Main Content */
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 450px;
+            backdrop-filter: blur(10px);
+            animation: slideIn 1s ease-out;
+        }
+
+        h2 {
+            font-size: 30px;
+            font-weight: 700;
+            color: #FFDC5E;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-field,
+        .select-field {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: none;
+            background-color: #444;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .input-field:focus,
+        .select-field:focus {
+            background-color: #2a5298;
+            box-shadow: 0 0 8px rgba(255, 220, 94, 0.8);
+        }
+
+        .btn {
+            padding: 14px;
+            background-color: #FFDC5E;
+            color: #1e3c72;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #FFB84C;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .error {
+            color: #ff4d4d;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .success {
+            color: #2ecc71;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .result-link {
+            display: inline-block;
+            font-size: 18px;
+            color: #1e3c72;
+            text-decoration: none;
+            border: 2px solid #1e3c72;
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .result-link:hover {
+            background-color: #1e3c72;
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Animation for form */
+        @keyframes slideIn {
+            0% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Footer Styles */
+        .footer {
+            font-size: 12px;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 5px;
+            width: 100%;
+            position: relative;
+            margin-top: auto; /* Push footer to the bottom */
+        }
+
+        .footer a {
+            color: #FFDC5E;
+            text-decoration: none;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            h2 {
+                font-size: 26px;
+            }
+
+            .input-field,
+            .select-field {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .btn {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            background-color: #25d366;
+            color: white;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .whatsapp-btn:hover {
+            background-color: #128c7e;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <div class="header">
+        <div class="school-name">Vivekanand Sr. Sec. School, Bhattu Kalan</div>
+        <div class="competition-name">VS-1st Scholarship Test</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Registration Closed</h2>
+        <p>Registration for the scholarship test is now closed. If you want to register your son/daughter, please contact us on WhatsApp.</p>
+
+        <!-- WhatsApp Button -->
+        <a href="https://wa.me/919350885613?text=I%20want%20to%20do%20registration%20of%20son%2Fdaughter" class="whatsapp-btn" target="_blank">Contact on WhatsApp for Registration</a>
+
+        <!-- Download Admit Card Button -->
+        <a href="https://lalit35.github.io/vivekananad-sr-sec-school/admitcard.html" class="result-link" target="_blank">Download Admit Card</a>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        If you have any issue regarding your admit card, such as name mistakes or unable to download, contact on <strong>9350885613</strong> during school time.
+    </div>
+
+</body>
+
+</html>

@@ -4,115 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Competition Registration</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         /* General Body and Layout */
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #6a82fb, #fc5c7d); /* Beautiful gradient background */
-            color: #333;
-            overflow-x: hidden;
+            background-color: #f4f4f9;
         }
 
         /* Header Styling */
         .header {
             text-align: center;
-            padding: 50px 20px;
-            background-color: #4b79a1;
+            padding: 20px;
+            background-color: #3498db;
             color: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            margin-bottom: 30px;
-            position: relative;
         }
 
         .header .school-name {
-            font-size: 3em;
+            font-size: 2.5em;
             margin: 0;
-            font-weight: bold;
         }
 
-        /* Main Container */
+        .header .logo {
+            width: 100px;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        /* Container for Form */
         .container {
             width: 80%;
-            max-width: 950px;
-            margin: 0 auto;
-            padding: 40px;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
             background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
 
         .form-title {
             text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 40px;
-            color: #4b79a1;
-            text-transform: uppercase;
-        }
-
-        .step-container {
-            display: none;
-        }
-
-        .step-container.active {
-            display: block;
+            font-size: 1.8em;
+            margin-bottom: 20px;
         }
 
         /* Form Fields Styling */
         label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             font-weight: bold;
-            color: #555;
-            font-size: 1.1em;
         }
 
         input, select, button {
             width: 100%;
-            padding: 14px;
-            margin-bottom: 20px;
-            font-size: 1.1em;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 1em;
             border: 1px solid #ccc;
-            border-radius: 8px;
+            border-radius: 5px;
             box-sizing: border-box;
-            background-color: #f9f9f9;
-            color: #333;
-            transition: border 0.3s ease-in-out, background-color 0.3s ease-in-out;
         }
 
-        input:focus, select:focus, button:focus {
-            border-color: #fc5c7d;
-            background-color: #f2f2f2;
-            outline: none;
+        input[type="tel"], input[type="email"], input[type="date"], input[type="number"] {
+            width: calc(100% - 20px);
         }
 
+        /* Button Styles */
         button {
-            background-color: #fc5c7d;
+            background-color: #3498db;
             color: white;
-            cursor: pointer;
-            font-size: 1.2em;
-            transition: background-color 0.3s ease-in-out;
             border: none;
-            border-radius: 8px;
-            padding: 14px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #ff3c6f;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background-color: #2980b9;
         }
 
-        /* Camera Capture Section */
+        /* Capture Photo Section */
         #frontCameraStream {
             width: 100%;
             height: auto;
             border: 2px solid #ddd;
-            border-radius: 8px;
+            border-radius: 5px;
             margin-bottom: 15px;
+            display: none;
+        }
+
+        #photoCanvas {
+            display: none;
+        }
+
+        #photoSuccessMessage {
+            font-size: 1.2em;
+            color: green;
+            text-align: center;
             display: none;
         }
 
@@ -124,7 +115,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             border: 8px solid #f3f3f3;
-            border-top: 8px solid #fc5c7d;
+            border-top: 8px solid #3498db;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -136,10 +127,10 @@
             100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
-        /* Success/Error Message */
+        /* Form Success Message */
         #successMessage {
             color: green;
-            font-size: 1.3em;
+            font-size: 1.2em;
             text-align: center;
             margin-top: 20px;
             display: none;
@@ -150,73 +141,94 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: #4b79a1;
+            width: 60px; /* Width of the round button */
+            height: 60px; /* Height of the round button */
+            background-color: #3498db;
             color: white;
             border: none;
-            border-radius: 50%;
-            font-size: 1.5em;
+            border-radius: 50%; /* Round shape */
+            font-size: 1.5em; /* Text size */
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            animation: blinkAnimation 2s infinite;
-            transition: transform 0.3s ease;
+            animation: blinkAnimation 2s infinite; /* Blinking animation */
+            transition: transform 0.3s ease; /* Smooth scale effect on hover */
         }
 
-        .help-button:hover {
-            background-color: #ff3c6f;
-            transform: scale(1.1);
-        }
-
+        /* Blinking animation */
         @keyframes blinkAnimation {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                width: 95%;
-                padding: 20px;
+            0% {
+                opacity: 1;
             }
-
-            .form-title {
-                font-size: 2em;
+            50% {
+                opacity: 0.5;
             }
-
-            .header .school-name {
-                font-size: 2em;
+            100% {
+                opacity: 1;
             }
         }
+
+        /* Hover Effect (Scale on hover) */
+        .help-button:hover {
+            background-color: #2980b9; /* Darker blue */
+            transform: scale(1.1); /* Slightly increase the size */
+        }
+
+        /* Tooltip text styling (optional) */
+        .help-button:after {
+            content: "Help";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            font-size: 1em;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Show tooltip when hovered */
+        .help-button:hover:after {
+            opacity: 1;
+            visibility: visible;
+        }
+
     </style>
 </head>
 <body>
     <div class="header">
         <h1 class="school-name">VIVEKANAND SR. SEC. SCHOOL</h1>
+        <img src="swami-vivekananda-png-thumbnail-1641912297.jpg" alt="Logo" class="logo">
     </div>
 
     <div class="container">
-        <h2 class="form-title">Competition Exam Registration 2025-26</h2>
+        <h2 class="form-title">Competition Exam Registration</h2>
         
-        <!-- Step 1: Camera Capture -->
-        <div class="step-container active" id="step1">
-            <label for="photo">Capture Photo:</label>
+        <!-- Form Start -->
+        <form id="registrationForm" method="POST" enctype="multipart/form-data">
+            
+            <!-- Camera Capture Section for Photo (Front Camera) -->
+            <label for="photo">Capture Photo :</label>
             <button type="button" id="cameraButton">Capture Photo Now</button>
             <button type="button" id="switchCameraButton">Switch Camera</button>
-            <video id="frontCameraStream" autoplay></video>
+            <video id="frontCameraStream" autoplay style="display:none; width: 100%;"></video>
             <canvas id="photoCanvas" style="display:none;"></canvas>
             <input type="hidden" id="capturedPhoto" name="photoUrl">
             <button type="button" id="captureButton" style="display:none;">Capture Photo</button>
-            <div id="photoSuccessMessage" style="display:none; color: green;">Photo captured successfully!</div>
-            <button id="nextButtonStep1" style="display:none;" onclick="nextStep(2)">Next</button>
-        </div>
 
-        <!-- Step 2: Student Details -->
-        <div class="step-container" id="step2">
+            <!-- Success Message for Photo Capture -->
+            <div id="photoSuccessMessage" style="display:none; color: green; font-size: 1.2em; text-align: center; margin-top: 20px;">
+                Photo captured successfully!
+            </div>
+
+            <!-- Student Details Section -->
+            <h3>Student Details:</h3>
             <label for="firstName">First Name:</label>
             <input type="text" name="firstName" id="firstName" required>
 
@@ -226,8 +238,14 @@
             <label for="dob">Date of Birth:</label>
             <input type="date" name="dob" id="dob" required>
 
-            <label for="studentClass">Class:</label>
-            <select name="studentClass" id="studentClass" required>
+            <label for="age">Age:</label>
+            <input type="number" name="age" id="age" required>
+
+            <label for="currentSchool">Current School:</label>
+            <input type="text" name="currentSchool" id="currentSchool" required>
+
+            <label for="class">Class (5th to 11th):</label>
+            <select name="class" id="class" required>
                 <option value="">Select Class</option>
                 <option value="5">5th</option>
                 <option value="6">6th</option>
@@ -238,44 +256,39 @@
                 <option value="11">11th</option>
             </select>
 
-            <label for="city">City:</label>
-            <input type="text" name="city" id="city" required>
+            <!-- Parent Information Section -->
+            <h3>Parent Details:</h3>
+            <div class="parent-names">
+                <label for="fatherName">Father's Name:</label>
+                <input type="text" name="fatherName" id="fatherName" required>
 
-            <button id="nextButtonStep2" onclick="nextStep(3)">Next</button>
-        </div>
+                <label for="motherName">Mother's Name:</label>
+                <input type="text" name="motherName" id="motherName" required>
+            </div>
 
-        <!-- Step 3: Parent Details -->
-        <div class="step-container" id="step3">
-            <label for="fatherName">Father's Name:</label>
-            <input type="text" name="fatherName" id="fatherName" required>
-
-            <label for="motherName">Mother's Name:</label>
-            <input type="text" name="motherName" id="motherName" required>
-
-            <button id="nextButtonStep3" onclick="nextStep(4)">Next</button>
-        </div>
-
-        <!-- Step 4: Contact Information -->
-        <div class="step-container" id="step4">
+            <!-- Contact Information -->
+            <h3>Contact Details:</h3>
             <label for="mobileNumber">Whatsapp Number:</label>
             <input type="tel" name="mobileNumber" id="mobileNumber" pattern="[0-9]{10}" required>
 
             <label for="email">Email:</label>
             <input type="email" name="email" id="email" required> 
             
+            <!-- Submit Button -->
             <button type="submit" id="submitButton">Submit</button>
-        </div>
+        </form>
 
         <!-- Success/Error Message -->
-        <div id="successMessage"></div>
+        <div id="successMessage" style="display:none; color: green; font-size: 1.2em; text-align: center; margin-top: 20px;"></div>
     </div>
 
     <!-- Loading Spinner -->
     <div id="loadingSpinner"></div>
 
     <!-- Help Button -->
-    <button class="help-button" id="helpButton">?</button>
+    <button class="help-button" onclick="window.location.href='https://youtu.be/jDE9A8__dwg?si=xDrtw7el5_MObfc5'">?</button>
 
+    <!-- JavaScript Integration -->
     <script>
         // Camera and Video Stream Elements
         const frontCameraStream = document.getElementById('frontCameraStream');
@@ -341,37 +354,62 @@
             photoCanvas.style.display = 'none';
             captureButton.style.display = 'none';
             switchCameraButton.style.display = 'none'; // Hide the switch camera button after capture
-
-            // Automatically move to next part after photo capture
-            document.getElementById('nextButtonStep1').style.display = 'block';  // Show next button
         });
 
         // Start the front camera when clicking the "Capture Photo Now" button
         cameraButton.addEventListener('click', startFrontCamera);
 
-        // Function to move to next step
-        function nextStep(stepNumber) {
-            const currentStep = document.getElementById(`step${stepNumber - 1}`);
-            const nextStep = document.getElementById(`step${stepNumber}`);
-
-            currentStep.classList.remove('active');
-            nextStep.classList.add('active');
-        }
-
         // Handle form submission (AJAX)
         registrationForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            loadingSpinner.style.display = 'block';
+            loadingSpinner.style.display = "block"; // Show loading spinner
 
+            // Construct form data
             const formData = new FormData(registrationForm);
 
-            // Simulate success after form submission
-            setTimeout(function () {
-                loadingSpinner.style.display = 'none';
-                successMessage.textContent = 'Registration Successful!';
-                successMessage.style.display = 'block';
-                registrationForm.reset();
-            }, 2000);
+            // AJAX request to submit form
+            $.ajax({
+                url: 'https://script.google.com/macros/s/AKfycbzjE3Z1ZDBzvP0HLgXrJb4yPxdefewHOhyBaC0W-1-KSDzESTCj-u_koMJWQ2JF9foW9g/exec',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    console.log('Form submitted successfully:', response);
+
+                    // Hide the loading spinner
+                    loadingSpinner.style.display = "none";
+
+                    // Show success message
+                    successMessage.textContent = "Your form has been submitted successfully!";
+                    successMessage.style.color = "green";
+                    successMessage.style.display = "block";
+
+                    // Redirect to payment page after 3 seconds
+                    setTimeout(function () {
+                        const email = encodeURIComponent($('#email').val());
+                        const firstName = encodeURIComponent($('#firstName').val());
+                        const mobileNumber = encodeURIComponent($('#mobileNumber').val());
+
+                        // Construct the payment URL with query parameters
+                        const paymentUrl = `https://lalit35.github.io/vivekananad-sr-sec-school/payment.html?email=${email}&firstName=${firstName}&mobile=${mobileNumber}`;
+
+                        // Redirect to the payment page
+                        window.location.href = paymentUrl;
+                    }, 3000);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error in form submission:', error);
+
+                    // Hide the loading spinner
+                    loadingSpinner.style.display = "none";
+
+                    // Show error message if submission fails
+                    successMessage.textContent = "There was an error submitting your form. Please try again.";
+                    successMessage.style.color = "red";
+                    successMessage.style.display = "block";
+                }
+            });
         });
     </script>
 </body>

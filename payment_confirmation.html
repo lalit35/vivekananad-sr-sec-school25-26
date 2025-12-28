@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #4CAF50;
+        }
+
+        .form-container {
+            margin: 20px 0;
+        }
+
+        .form-container label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        .form-container input {
+            width: 300px;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+        }
+
+        .note {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        /* Loading spinner styles */
+        .spinner {
+            display: none;
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #4CAF50; /* Green */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #statusMessage {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Payment Confirmation</h1>
+    <h2>₹49 Payment</h2>
+
+    <p class="note">Please review your details and upload the screenshot of your payment confirmation below.</p>
+
+    <!-- Display user details -->
+    <div class="form-container">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" readonly>
+
+        <label for="mobile">Mobile Number:</label>
+        <input type="tel" id="mobile" name="mobile" readonly>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" readonly>
+    </div>
+
+    <p class="note">Please upload your payment confirmation screenshot (any file type accepted).</p>
+
+    <!-- Payment Screenshot Upload -->
+    <div class="form-container">
+        <label for="paymentScreenshot">Upload Payment Screenshot:</label>
+        <input type="file" id="paymentScreenshot" name="paymentScreenshotUrl" accept="*/*" required>
+    </div>
+
+    <button class="button" type="button" onclick="submitForm()">Submit Screenshot</button>
+
+    <!-- Loading spinner -->
+    <div id="spinner" class="spinner"></div>
+
+    <p id="statusMessage" class="note"></p>
+
+    <script>
+        // Extract query parameters and pre-fill fields
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const firstName = urlParams.get('firstName') || '';
+            const mobile = urlParams.get('mobile') || '';
+            const email = urlParams.get('email') || '';
+            
+            document.getElementById('firstName').value = firstName;
+            document.getElementById('mobile').value = mobile;
+            document.getElementById('email').value = email;
+        };
+
+        // Function to handle the form submission and upload the screenshot
+        function submitForm() {
+            const screenshot = document.getElementById('paymentScreenshot').files[0];
+            const firstName = document.getElementById('firstName').value;
+            const mobile = document.getElementById('mobile').value;
+            const email = document.getElementById('email').value;
+
+            // Check if a file has been selected for upload
+            if (!screenshot) {
+                document.getElementById('statusMessage').textContent = 'Please select a file to upload.';
+                return;
+            }
+
+            // Show loading spinner
+            document.getElementById('spinner').style.display = 'inline-block';
+            document.getElementById('statusMessage').textContent = 'Uploading file...';
+
+            const reader = new FileReader();
+            reader.onloadend = function () {
+                // Extract the Base64 encoded file data (remove the 'data:image/*;base64,' part)
+                const base64Data = reader.result.split(',')[1];
+
+                // Prepare the FormData object to send data to the backend
+                const formData = new FormData();
+                formData.append('firstName', firstName);
+                formData.append('mobile', mobile);
+                formData.append('email', email);
+                formData.append('paymentScreenshotUrl', base64Data);
+
+                // Send data to the Google Apps Script endpoint
+                fetch("https://script.google.com/macros/s/AKfycbzTSM7_m3HBeGIg8sqx6vPwnLvJ100P8tfAgfrpSxJO--EOM5rIJ1o6DzUxQzDtDherOw/exec", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json()) // Parse the JSON response
+                .then(data => {
+                    if (data.status === "success") {
+                        // Handle successful form submission
+                        document.getElementById('statusMessage').textContent = 'File uploaded successfully! Redirecting...';
+                    } else {
+                        // Handle failure response
+                        document.getElementById('statusMessage').textContent = 'Error uploading file. Please try again.';
+                    }
+                    
+                    // Redirect to Thank You page with query parameters after 3 seconds (whether success or error)
+                    setTimeout(() => {
+                        window.location.href = `https://lalit35.github.io/vivekananad-sr-sec-school/thanks.html?firstName=${encodeURIComponent(firstName)}&mobile=${encodeURIComponent(mobile)}&email=${encodeURIComponent(email)}`;
+                    }, 3000); // 3 seconds delay
+                })
+                .catch(error => {
+                    // Handle network or other errors
+                    document.getElementById('statusMessage').textContent = 'There was an error. Please try again.';
+                    console.error(error);
+                    
+                    // Redirect to Thank You page after 3 seconds even in case of an error
+                    setTimeout(() => {
+                        window.location.href = `https://lalit35.github.io/vivekananad-sr-sec-school/thanks.html?firstName=${encodeURIComponent(firstName)}&mobile=${encodeURIComponent(mobile)}&email=${encodeURIComponent(email)}`;
+                    }, 3000); // 3 seconds delay
+                });
+            };
+
+            // Read the file as a Data URL (Base64)
+            reader.readAsDataURL(screenshot);
+        }
+    </script>
+
+</body>
+</html>

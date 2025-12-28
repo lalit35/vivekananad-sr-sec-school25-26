@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Payment</title>
+</head>
+<body>
+
+    <h1>Click to Pay</h1>
+
+    <!-- UPI Payment Button -->
+    <button onclick="payWithUPI()">Pay ₹5</button>
+
+    <script>
+        function payWithUPI() {
+            const upiID = 'lalit0@fam';  // Replace with your actual UPI ID
+            const amount = '5';  // Amount to be paid (₹500 in this case)
+            const note = 'Payment for service';  // Transaction note
+
+            // Generate a random 10-digit transaction ID
+            const randomTransactionNumber = Math.floor(Math.random() * 10000000000);  // Random 10-digit number
+            const transactionId = 'FMPIB' + randomTransactionNumber;  // Transaction ID starting with FMPIB
+
+            // Generate a random 16-digit reference number
+            const randomReferenceNumber = Math.floor(Math.random() * 10000000000000000);  // Random 16-digit number
+            const referenceNumber = randomReferenceNumber.toString();  // Convert to string to ensure it's not scientific notation
+
+            // Construct the UPI payment URL
+            const url = `upi://pay?pa=${upiID}&pn=Merchant%20Name&am=${amount}&tn=${encodeURIComponent(note)}&cu=INR&tid=${transactionId}&tr=${referenceNumber}`;
+
+            // Log the URL for debugging purposes
+            console.log("Generated UPI URL:", url);
+
+            // Redirect user to UPI app
+            window.location.href = url;
+        }
+    </script>
+
+</body>
+</html>
